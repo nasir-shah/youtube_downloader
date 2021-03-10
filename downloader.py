@@ -2,42 +2,44 @@ from pytube import YouTube
 from datetime import datetime
 import ffmpeg
 import os
- 
-storage_dir_audio = "D:\\Test\\audio\\"
-storage_dir_video = "D:\\Test\\video\\"
-storage_dir_output = "D:\Test_Data\\output\\"
- 
-raw_link = "https://youtu.be/AjtX1N_VT9E"
- 
-try:
-    #creating object
-    yt = YouTube(raw_link)
- 
-except:
-    print("connection error")
- 
-print(yt.title)
-#print(yt.check_availability())
-print(yt.author)
-#print(yt.caption_tracks)
-#print(yt.captions)
-#st = (yt.description).encode('utf-8')
-#print(st)
-print(yt.keywords)
-print(yt.length)
-#print(yt.metadata)
-print(yt.publish_date)
-print(yt.rating)
-#print(yt.streams)
-#print(yt.thumbnail_url)
-print(yt.views)
-#print(help(yt))
 
-#print(yt.streams.first().mime_type)
+from constants.constants import storage_dir_output
  
-for stream in yt.streams:
-    #print(help(stream))
-    pass
+class DownLoader:
+    def __init__(self, link):
+        self.__yt = YouTube(link)
+
+    def get_title(self):
+        return self.__yt.title
+
+    def get_author(self):
+        return self.__yt.author
+
+    def get_publish_date(self):
+        return self.__yt.publish_date
+
+    def get_rating(self):
+        return self.__yt.rating
+
+    def get_views(self):
+        return self.__yt.views
+    
+    def get_length(self):
+        return self.__yt.length
+    
+    def get_keywords(self):
+        return self.__yt.keywords
+    
+    def download(self,format):
+        self.__yt.streams.filter(res=format,mime_type="video/mp4",progressive="True").first().download(storage_dir_output)
+
+
+y = DownLoader("https://youtu.be/kFUi3ikZFvk")
+print('Download has begin')
+print(y.get_author())
+y.download('720p')
+### REDUNDANT CODE
+
 # stream = yt.streams[4]
 # print(stream)
 # stream.download(storage_dir_video)
@@ -46,12 +48,7 @@ for stream in yt.streams:
 # stream.download(storage_dir_audio)
 #print(datetime.now())
 # yt.streams.filter(res="720p",mime_type="video/mp4",progressive="True").first().download(storage_dir) 
-if os.path.exists(storage_dir_output):
-    print("ll")
-    print(yt.streams.filter(res="360p",mime_type="video/mp4",progressive="True").size())
-    #yt.streams.filter(mime_type="video/mp4",progressive="True").first().download(storage_dir_output)
-else:
-    print('ddd')
+
 #print(datetime.now())
 #print("finish!")
 
